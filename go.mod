@@ -1,4 +1,4 @@
-module h2raw
+module github.com/UniformlyR4ndom/h2raw
 
 go 1.22.6
 

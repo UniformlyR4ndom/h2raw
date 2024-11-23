@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"h2raw/h2raw"
+	"github.com/UniformlyR4ndom/h2raw/h2raw"
 )
 
 
