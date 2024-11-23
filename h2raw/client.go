@@ -138,7 +138,7 @@ func (c *Client) MakeRequest(h2conn *H2Conn, req *Request, streamId uint32) (*Re
 func (c *Client) readResponse(h2conn *H2Conn) (*Response, error) {
 	framer := h2conn.Framer
 	hasBody := false
-	var body []byte
+	body := []byte{} 
 	headers := make(map[string][]string)
 	loop:
 	for {
@@ -151,6 +151,7 @@ func (c *Client) readResponse(h2conn *H2Conn) (*Response, error) {
 		c.logVerbose(fmt.Sprintf("Received frame: %v", frame))
 		switch f := frame.(type) {
 		case *http2.HeadersFrame:
+			// TODO: merge headers instead of overwriting
 			headers, err = parseHeaders(f.HeaderBlockFragment())
 			if err != nil {
 				return nil, err
@@ -161,8 +162,7 @@ func (c *Client) readResponse(h2conn *H2Conn) (*Response, error) {
 			}
 		case *http2.DataFrame:
 			tmp := f.Data()
-			body = make([]byte, len(tmp))
-			copy(body, tmp)
+			body = append(body, tmp...)
 			hasBody = true
 
 			if f.StreamEnded() {
