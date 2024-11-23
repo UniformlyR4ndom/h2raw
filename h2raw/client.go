@@ -160,7 +160,7 @@ func (c *Client) readResponse(h2conn *H2Conn) (*Response, error) {
 				break loop
 			}
 		case *http2.DataFrame:
-			tmp = f.Data()
+			tmp := f.Data()
 			body = make([]byte, len(tmp))
 			copy(body, tmp)
 			hasBody = true
