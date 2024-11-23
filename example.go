@@ -11,8 +11,9 @@ import (
 
 
 func main() {
-	endpoint := "127.0.0.1:8000"
-	authority := endpoint // basically the Host header
+	endpoint, authority := "example.com:443", "example.com"
+	// endpoint, authority := "127.0.0.1:8000" "localhost:8000" // local http server
+
 	exampleSimpleGet(endpoint, authority)
 	exampleFatGet(endpoint, authority)
 	exampleSimplePost(endpoint, authority)
@@ -36,7 +37,7 @@ func exampleSimpleGet(endpoint, authority string) {
 	}
 
 	req := h2raw.NewRequest("GET", "https", authority, "/example/simpleget")
-	req.AddHeader("host", "not the actual host")
+	req.AddHeader("host", authority)
 	req.AddHeader("x-demo-header", "just some header value")
 
 	resp, err := client.MakeRequest(h2conn, req, 1)
