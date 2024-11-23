@@ -153,16 +153,18 @@ func (c *Client) readResponse(h2conn *H2Conn) (*Response, error) {
 		case *http2.HeadersFrame:
 			headers, err = parseHeaders(f.HeaderBlockFragment())
 			if err != nil {
-
-			return nil, err
+				return nil, err
 			}
 
 			if f.StreamEnded() {
 				break loop
 			}
 		case *http2.DataFrame:
-			body = f.Data()
+			tmp = f.Data()
+			body = make([]byte, len(tmp))
+			copy(body, tmp)
 			hasBody = true
+
 			if f.StreamEnded() {
 				break loop
 			}
